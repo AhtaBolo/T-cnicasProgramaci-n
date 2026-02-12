@@ -1,17 +1,19 @@
 ﻿// Programa principal
 Calculadora calculadora = new Calculadora(5, 2);
 
+Console.WriteLine("Los numeros a operar son: \nNumero 1 = 5 \nNumero 2 = 2 \n");
+
 float resultadoD = calculadora.Division();
-Console.WriteLine(resultadoD);
+Console.WriteLine($"El resultado de la division es: {resultadoD}");
 
 int resultadoS = calculadora.Suma();
-Console.WriteLine(resultadoS);
+Console.WriteLine($"El resultado de la suma es: {resultadoS}");
 
 int resultadoR = calculadora.Resta();
-Console.WriteLine(resultadoR);
+Console.WriteLine($"El resultado de la resta es: {resultadoR}");
 
 int resultadoM = calculadora.Multiplicacion();
-Console.WriteLine(resultadoM);
+Console.WriteLine($"El resultado de la multiplicacion es: {resultadoM}");
 
 // Clases
 
