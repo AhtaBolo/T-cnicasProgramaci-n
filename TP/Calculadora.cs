@@ -1,25 +1,22 @@
 ﻿// Programa principal
 Calculadora calculadora = new Calculadora(5, 2);
 
-Console.WriteLine("Los numeros a operar son: \nNumero 1 = 5 \nNumero 2 = 2 \n");
+Console.WriteLine($"Los numeros a operar son: \nNumero 1 = {calculadora.Numero1} \nNumero 2 = {calculadora.Numero2} \n");
+
+int resultado = calculadora.Suma();
+Console.WriteLine($"El resultado de la suma es: {resultado}");
+
+resultado = calculadora.Resta();
+Console.WriteLine($"El resultado de la resta es: {resultado}");
+
+resultado = calculadora.Multiplicacion();
+Console.WriteLine($"El resultado de la multiplicacion es: {resultado}");
 
 float resultadoD = calculadora.Division();
 Console.WriteLine($"El resultado de la division es: {resultadoD}");
 
-int resultadoS = calculadora.Suma();
-Console.WriteLine($"El resultado de la suma es: {resultadoS}");
-
-int resultadoR = calculadora.Resta();
-Console.WriteLine($"El resultado de la resta es: {resultadoR}");
-
-int resultadoM = calculadora.Multiplicacion();
-Console.WriteLine($"El resultado de la multiplicacion es: {resultadoM}");
-
 // Clases
-
-
-
-//Calculadora basica que opera solo 2 numeros enteros
+    // Calculadora basica que opera solo 2 numeros enteros
 public class Calculadora
 {
     // Atributos public 

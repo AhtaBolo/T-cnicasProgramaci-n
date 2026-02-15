@@ -11,15 +11,15 @@
         Altura = altura;
     }
 
-// Metodos
-public void Perimetro()
+    // Metodos
+    public void Perimetro()
     {
-    Console.WriteLine($"El perimetro es: {Base* 2f+ Altura * 2f}");
+        Console.WriteLine($"El perimetro es: {Base* 2f+ Altura * 2f}");
     }
-public void Area()
-{
-    float calculoArea;
-    calculoArea = Base * Altura;
-    Console.WriteLine($"El area es: {calculoArea}");
-}
+    public void Area()
+    {
+        float calculoArea;
+        calculoArea = Base * Altura;
+        Console.WriteLine($"El area es: {calculoArea}");
+    }
 }

@@ -4,7 +4,7 @@
 public string Nombre{ get; set; } //Encapsulamiento
 public int Edad{ get; set; }
 
-    // Atributo statica
+    // Atributo static
     public static string Pais { get; set; } = "España";
 
 // Constructro
