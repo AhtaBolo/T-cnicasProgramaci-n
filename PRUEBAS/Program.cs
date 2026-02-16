@@ -244,6 +244,8 @@ Console.WriteLine(cosa);
 
 */
 
+/*
+
 // Este método promete devolver un entero (int)
 int Sumar(int a, int b)
 {
@@ -253,3 +255,36 @@ int Sumar(int a, int b)
 // USO:
 // Tengo que poner una "canasta" (variable) para cachar lo que me lanza
 int resultado = Sumar(5, 5);
+
+*/
+
+
+
+// EL OBJETO (Usando el plano)
+// Aquí nace el objeto "miFerrari" usando el Constructor
+Auto miFerrari = new Auto("Rojo");
+
+// Usando un Método
+miFerrari.Acelerar();
+
+// LA CLASE (El plano)
+class Auto
+{
+    // ATRIBUTOS (Características)
+    public string Color;
+    public int Gasolina;
+
+    // CONSTRUCTOR (Nacimiento/Inicialización)
+    public Auto(string colorDeseado)
+    {
+        Color = colorDeseado; // Le pones el color que pidió el cliente
+        Gasolina = 5;         // Le regalas 5 litros para empezar
+    }
+
+    // MÉTODO (Acción)
+    public void Acelerar()
+    {
+        Gasolina = Gasolina - 1; // Gastas gasolina al moverte
+        Console.WriteLine("¡Run run!");
+    }
+}
