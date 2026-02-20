@@ -1,6 +1,8 @@
-﻿// Arreglos con [] arreglos son objetos sin atributos
+// Arreglos con [] arreglos son objetos sin atributos
 
 // Declaracion con tmaño explicito
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 int [] numeros = new int[2]; //tambien es un objeto, una instancia de un arreglo de 2 numeros
 
 // Asignando elementos al arreglo
@@ -41,4 +43,46 @@ foreach (bool b in estado) // Variante del for, ciclo repetitivo, cual es el val
     {
         Console.WriteLine("Idk");
     }
+}
+
+
+
+// METODOS ARREGLOS
+
+//Ordenar arreglo
+Console.WriteLine("Desordenado");
+foreach (int numero in numeros2)
+{
+    Console.WriteLine(numero);
+}
+
+Array.Sort(numeros2); // Ordenamiento tipo burbuja SORT mayor a menor
+Console.WriteLine("Ordenado con Sort");
+foreach (int numero in numeros2)
+{
+    Console.WriteLine(numero);
+}
+
+Array.Reverse(numeros2); // Ordenamiento tipo burbuja Reverse invierte las posiciones
+Console.WriteLine("Reverse");
+foreach (int numero in numeros2)
+{
+    Console.WriteLine(numero);
+}
+
+// Metodo para buscar un valor, funciono pero creo que fallaba algo tecnico quitando el sort y el reverse
+int indice = Array.BinarySearch(numeros2,6);
+Console.WriteLine(indice);
+
+
+// LISTAS 
+List <int> numeros3 = new List<int>(); // se instancia la lista, no necesita saber el numero de elementos
+//Arreglos definidos, Listas dinamicas
+
+numeros3.Add(7);
+numeros3.Add(20);
+
+foreach (int numero in numeros3)
+{
+    Console.WriteLine(numero);
 }
