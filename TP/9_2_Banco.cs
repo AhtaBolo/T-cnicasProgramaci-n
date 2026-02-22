@@ -1,7 +1,8 @@
-/* Programa Principal Del Banco
+// Programa Principal Del Banco
 Banco banco = new Banco();
+Console.WriteLine("Bienvenido Al Banco");
 // FALTA ESTA PARTE DEL INICIO
-char repetir 'y';
+char repetir = 'n';
 do
 {
     try
@@ -9,34 +10,42 @@ do
         CuentaBancaria cuentaOrigen = banco.BuscarCuenta("123456");
 
         // Ejercicio Menu
-        Console.WriteLine("Selecciona El Movimiento A Realizar \n1)Depositar \n2)Reitar \nTransferir");
+
+        Console.WriteLine("\nSelecciona El Movimiento A Realizar:");
+        Console.WriteLine("1)Depositar \n2)Retirar \n3)Transferir");
         int menu = int.Parse(Console.ReadLine() ?? "");
         switch (menu)
         {
             case 1:
-                Console.WriteLine($"Saldo Inicial:{cuentaOrigen.Saldo}");
-                Console.WriteLine($"Ingresa El Monto a Depositar\n");
-                int deposito = int.Parse(Console.ReadLine() ?? "");
-                cuentaOrigen.Saldo += deposito;
-                Console.WriteLine($"\nIngresa El Monto a Depositar\n");
+                Console.WriteLine($"\nSaldo Actual:{cuentaOrigen.Saldo}");
+                Console.WriteLine($"Ingresa El Monto A Depositar: ");
+                decimal deposito = decimal.Parse(Console.ReadLine() ?? "");
+                cuentaOrigen.Depositar(deposito);
+                Console.WriteLine($"\nDepositando...");
+                Console.WriteLine($"\n¡Depósito exitoso!");
+                Console.WriteLine($"\nNuevo Saldo: {cuentaOrigen.Saldo}\n");
                 break;
 
             case 2:
-                Console.WriteLine($"\nEl resultado de la calculadora básica : {calculadora.Resta()}");
+                Console.WriteLine($"\nSaldo Actual:{cuentaOrigen.Saldo}");
+                Console.WriteLine($"Ingresa El Monto A Retirar: ");
+                decimal retiro = decimal.Parse(Console.ReadLine() ?? "");
+                cuentaOrigen.Retirar(retiro);
+                Console.WriteLine($"\nRetirando...");
+                Console.WriteLine($"\n¡Retiro exitoso!");
+                Console.WriteLine($"\nNuevo saldo: {cuentaOrigen.Saldo}\n");
                 break;
 
             case 3:
-                Console.WriteLine($"Saldo Inicial:${cuentaOrigen.Saldo}");
-                Console.WriteLine($"Excribe la cuenta destino para tansferir:");
+                Console.WriteLine($"\nSaldo Actual:${cuentaOrigen.Saldo}");
+                Console.WriteLine($"Excribe La Cuenta Destino:");
                 CuentaBancaria cuentaDestino = banco.BuscarCuenta(Console.ReadLine() ?? "");
-                Console.WriteLine($"Excribe la cantidad para tansferir: $");
+                Console.WriteLine($"Excribe El Monto A Tansferir: $");
                 decimal cantidad = decimal.Parse(Console.ReadLine() ?? "");
-
-                Console.WriteLine($"Haceindo Transferencia ...");
                 cuentaOrigen.Transferir(cuentaDestino, cantidad);
-                Console.WriteLine($"Saldo Final:${cuentaOrigen.Saldo}");
-
-
+                Console.WriteLine($"Transfiriendo ...");
+                Console.WriteLine($"\n¡Transferencia Exitosa!");
+                Console.WriteLine($"Nuevo Saldo:${cuentaOrigen.Saldo}\n");
                 break;
 
             default: // <--- ¡Aquí van dos puntos, no punto y coma!
@@ -44,7 +53,7 @@ do
                 break;
         }
 
-        Console.WriteLine("Esrcibe Y para realizar omas operaciones");
+        Console.WriteLine("Escribe Y Para Realizar Más Operaciones");
         repetir = char.Parse(Console.ReadLine() ?? "");
     }
 
@@ -70,7 +79,9 @@ do
         // Console.WriteLine(ex.ToString()); // Te arroja el string directo
     }
 
-} 
+}
+while (repetir == 'y'); 
+//while (repetir == 'y' || repetir == 'Y');
 
 // Excepciones
 class SaldoInsuficienteException : Exception
@@ -91,7 +102,7 @@ class DepositoInvalidoException : Exception
     public DepositoInvalidoException(string mensaje) : base(mensaje) { }
 }
 
-// Clses del Banco
+// Clases del Banco
 public class CuentaBancaria
 {
     // Atributos

@@ -15,6 +15,7 @@
     <Compile Remove="7_2_Dispositivo.cs" />
     <Compile Remove="8_1_Excepciones.cs" />
     <Compile Remove="8_2_Arreglos.cs" />
+    <Compile Remove="9_1_Banco.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <None Include="5_CodigoRectangulo.cs" />
     <None Include="7_2_Dispositivo.cs" />
     <None Include="7_1_Vehiculo.cs" />
+    <None Include="9_1_Banco.cs" />
   </ItemGroup>
 
 </Project>
