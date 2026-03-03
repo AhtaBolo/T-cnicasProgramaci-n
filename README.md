@@ -1,3 +1,3 @@
 # T-cnicasProgramaci-n
 Idk, será el definitivo?
-Si, debera ser el definitivo
+Si, deberá ser el definitivo
