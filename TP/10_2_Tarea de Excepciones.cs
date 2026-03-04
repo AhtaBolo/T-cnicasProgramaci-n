@@ -20,7 +20,7 @@ while (!salir)
         Console.WriteLine("8) Salir");
 
         Console.WriteLine("Selecciona La Operacion:");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.ForegroundColor = ConsoleColor.DarkYellow;    
 
         int opcion = int.Parse(Console.ReadLine() ?? "");
 
@@ -62,62 +62,52 @@ while (!salir)
 
                 if (cantidad != "")
                 {
-                    // Excepcion
                     int cantidadValida;
-                    if (!int.TryParse(cantidad, out cantidadValida))
+                    while (true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        throw new numerotextoExcepcion("Ingresa un número, no letras.");
+                        try
+                        {
+                            if (!int.TryParse(cantidad, out cantidadValida))
+                            {
+                                throw new FormatException("Debes Ingresar Un Número Válido");
+                            }
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Error: {ex.Message}");
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            cantidad = Console.ReadLine() ?? "";
+                        }
                     }
 
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"Prioridad (1-3)");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     string prioridad = Console.ReadLine() ?? "";
+                    
                     int prioridadValida;
-                    while (!int.TryParse(prioridad, out prioridadValida) || prioridadValida < 1 || prioridadValida > 3)
+                    while (true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("La prioridad debe ser un número entre 1 y 3.\n");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-
-                        Console.WriteLine("Prioridad (1-3): ");
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        prioridad = Console.ReadLine() ?? "";
+                        try
+                        {
+                            if (!int.TryParse(prioridad, out prioridadValida) || prioridadValida < 1 || prioridadValida > 3)
+                            {
+                                throw new FormatException("Debes Ingresar Un Número Del 1 al 3");
+                            }
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Error: {ex.Message}");
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            prioridad = Console.ReadLine() ?? "";
+                        }
                     }
 
-                    /* Con While
-                    int cantidadValida;
-                    while (!int.TryParse(cantidad, out cantidadValida))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Ingresa un número válido para la cantidad.\n");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-
-                        Console.WriteLine("Cantidad: ");
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        cantidad = Console.ReadLine() ?? "";
-                    }
-
-                    int prioridadValida;
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Prioridad (1-3):");
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    string prioridad = Console.ReadLine() ?? "";
-                    while (!int.TryParse(prioridad, out prioridadValida) || prioridadValida < 1 || prioridadValida > 3)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("La prioridad debe ser un número entre 1 y 3.\n");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-
-                        Console.WriteLine("Prioridad (1-3): ");
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        prioridad = Console.ReadLine() ?? "";
-                    }*/
-
-                    //inventario.agregarSuministro(nombreSum, int.Parse(cantidad), int.Parse(prioridad)); //Antes
-                    //Despues de la excepcion
-                    inventario.agregarSuministro(nombreSum, cantidadValida, prioridadValida);
+                    inventario.agregarSuministro(nombreSum, int.Parse(cantidad), int.Parse(prioridad)); //Antes
                 }
                 else
                 {
@@ -126,15 +116,15 @@ while (!salir)
                 break;
 
             case 7:
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Ingresa El Nombre Del Suministro A Eliminar: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Ingresa El Nombre Del Suministro A Eliminar: ");
                 string nombreElim = Console.ReadLine() ?? "";
                 inventario.eliminarSuministro(nombreElim);
                 break;
 
             case 8:
-                Console.ForegroundColor = ConsoleColor.White;
-                salir = true;
+            Console.ForegroundColor = ConsoleColor.White;
+            salir = true;
                 break;
 
             default:
@@ -145,19 +135,15 @@ while (!salir)
     }
     catch (FormatException)
     {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.WriteLine("Debes Ingresar un número, baboso\n");
+        Console.ForegroundColor= ConsoleColor.DarkRed;
+        Console.WriteLine("Debes Ingresar un número\n");
     }
     catch (algocadenaExcepcion ex)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"ERROR: {ex.Message}\n");
     }
-    catch (numerotextoExcepcion ex)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"ERROR: {ex.Message}\n");
-    }
+
 }
 
 // Excepciones (2) cadena vacia y de numero a texto
@@ -166,11 +152,11 @@ class algocadenaExcepcion : Exception
     public algocadenaExcepcion(string mensaje) : base(mensaje) { }
     //system argument exception
 }
-class numerotextoExcepcion : Exception
+/*class numerotextoExcepcion : Exception
 {
     public numerotextoExcepcion(string mensaje) : base(mensaje) { }
     //Systemformatexception
-}
+}*/
 
 // Clases
 public class Suministro // Unidad
@@ -181,7 +167,7 @@ public class Suministro // Unidad
     public int Prioridad { get; set; } //  Debe tener 1= Alta ; 2 = Media ; 3 = Baja;
 
     // Constructor ¿1?
-    public Suministro(string nombre, int cantidad, int prioridad)
+    public Suministro (string nombre, int cantidad, int prioridad)
     {
         Nombre = nombre;
         Cantidad = cantidad;
@@ -212,7 +198,7 @@ public class Inventario // Tiene suministros
     // Constructor
     public Inventario()
     {
-        suministros = new Suministro[]
+        suministros = new Suministro[] 
         {
             new Suministro("Oxigeno", 15, 1),
             new Suministro("Gasolina"),
@@ -264,7 +250,7 @@ public class Inventario // Tiene suministros
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
 
-        Array.Sort(suministros, (x, y) => x.Nombre.CompareTo(y.Nombre));
+        Array.Sort(suministros,(x,y) => x.Nombre.CompareTo(y.Nombre));
         Console.WriteLine("Suministros Ordenados por nombre\n");
     }
 
@@ -288,13 +274,13 @@ public class Inventario // Tiene suministros
     public void agregarSuministro(string nombre, int cantidad, int prioridad)
     {
         int indiceNull = Array.FindIndex(suministros, s => s == null);
-        if (indiceNull >= 0)
+        if(indiceNull >= 0)
         {
             suministros[indiceNull] = new Suministro(nombre, cantidad, prioridad);
         }
         else
         {
-            Array.Resize(ref suministros, suministros.Length + 1); // ref para no eliminar el arreglo y tener la longitud antes de cambiarla
+            Array.Resize(ref suministros, suministros.Length+1); // ref para no eliminar el arreglo y tener la longitud antes de cambiarla
             suministros[suministros.Length - 1] = new Suministro(nombre, cantidad, prioridad); //-1 para olvidar el indice 
         }
         Console.ForegroundColor = ConsoleColor.Blue;
@@ -311,11 +297,11 @@ public class Inventario // Tiene suministros
     public void eliminarSuministro(string nombre)
     {
         int indice = Array.FindIndex(suministros, s => s.Nombre.ToLower() == nombre.ToLower()); //s tal que del suministro s
-        if (indice >= 0)
+        if(indice >= 0)
         {
-            for (int i = indice; i < suministros.Length - 1; i++)
+            for (int i = indice; i < suministros.Length-1; i++) 
             {
-                suministros[i] = suministros[i + 1];
+                suministros[i] = suministros[i + 1]; 
             }
             Array.Resize(ref suministros, suministros.Length - 1);
             Console.ForegroundColor = ConsoleColor.Blue;

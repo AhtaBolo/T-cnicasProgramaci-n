@@ -107,7 +107,7 @@ static string ObtenerOpcion()
     }
 }
 
-static Guerrero SeleccionarClase(string nombre) /////////////// en el parentesis falta algo
+static Guerrero SeleccionarClase(string nombre)
 {
     while (true)
     {
