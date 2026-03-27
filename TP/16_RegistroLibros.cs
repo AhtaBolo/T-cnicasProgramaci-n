@@ -198,8 +198,6 @@ public class Libreria
         Libro nuevoLibro;
 
         try
-        {
-
             nuevoLibro = new LIbroFiccion(titulo, autor, genero);
             Libros.Add(nuevoLibro);
         }
