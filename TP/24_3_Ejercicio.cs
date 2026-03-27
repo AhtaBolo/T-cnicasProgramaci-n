@@ -45,13 +45,21 @@ public class GestorEstudiantes
                     writer.WriteLine(estudiante.ToString());
                 }    
             }
-            Console.WriteLine("Estudiantes no se que mas");
+            Console.WriteLine("Estudiantes guardados correctamente");
 
         }
-        catch
+        catch (Exception ex)
         {
-
+            Console.WriteLine(ex.Message);
         }
     }
 
+    //Metodos para leer la lista
+
+/*    public List<Estudiante> LeerEstudiantes()
+    {
+        List<Estudiante> estudiantesLectura = new List<Estudiante>();
+
+    }
+*/
 }
