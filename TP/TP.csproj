@@ -19,7 +19,8 @@
     <Compile Remove="16_RegistroLibros.cs" />
     <Compile Remove="17_ Gestion Deportiva.cs" />
     <Compile Remove="17_Examen.cs" />
-    <Compile Remove="18_1_IDK.cs" />
+    <Compile Remove="24_1_IDK.cs" />
+    <Compile Remove="24_2_Archivos.cs" />
     <Compile Remove="4_CodigoPersona.cs" />
     <Compile Remove="4_Persona.cs" />
     <Compile Remove="5_CodigoRectangulo.cs" />
@@ -46,7 +47,8 @@
     <None Include="16_RegistroLibros ST.cs" />
     <None Include="17_ Gestion Deportiva.cs" />
     <None Include="17_Examen.cs" />
-    <None Include="18_1_IDK.cs" />
+    <None Include="24_1_IDK.cs" />
+    <None Include="24_2_Archivos.cs" />
     <None Include="4_Persona.cs" />
     <None Include="5_Rectangulo.cs" />
     <None Include="8_1_Excepciones.cs" />
