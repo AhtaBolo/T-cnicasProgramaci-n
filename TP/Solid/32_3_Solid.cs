@@ -1,82 +1,106 @@
 ﻿// Sistema de Vacunas En Una Veterinaria
 
+var mensajeria = new EmailService();
+var notificador = new Notificacion(mensajeria);
+var calculadoraService = new CalculadoraVacunas();
+
+// Perro
 Console.WriteLine("Caso1 mascota comun:");
-var sistema = new SistemaVeterinaria();
-sistema.AtenderMascota("Juanito", "Perro", 2);
+var estrategiaPerro = new CalculadoraPerro();
+var sistema1 = new SistemaVeterinaria(notificador, calculadoraService, estrategiaPerro);
+sistema1.AtenderMascota("Juanito", "Perro", 2);
 
-Console.WriteLine();
+Console.WriteLine("\n");
 
+// Ave
 Console.WriteLine("Caso2 mascota comun no contemplado:");
-var sistema2 = new SistemaVeterinaria();
+var estrategiaGral = new CalculadoraXDefecto();
+var sistema2 = new SistemaVeterinaria(notificador, calculadoraService, estrategiaGral);
 sistema2.AtenderMascota("Jorgito", "Ave", 3);
 
-Console.WriteLine();
+Console.WriteLine("\n");
 
-    Console.WriteLine("Caso3 mascota especial:");
-    SistemaVeterinaria sistema3 = new SistemaVeterinariaEspecial();
-    sistema3.AtenderMascota("Rex", "Perro", 8);     // NO cumple con L, el hijo debe hacer lo mismo del padre
+// Rex - Perro      Ya no revienta el programa
+Console.WriteLine("Caso3 mascota especial:");
+var sistema3 = new SistemaVeterinariaEspecial(notificador, calculadoraService, estrategiaPerro);
+sistema3.AtenderMascota("Rex", "Perro", 8);
 
+Console.WriteLine("\n");
 
-Console.WriteLine();
-
+// Cocodrilo
 Console.WriteLine("Caso4 mascota especial:");
-var sistema4 = new SistemaVeterinaria();
+
+var sistema4 = new SistemaVeterinaria(notificador, calculadoraService, estrategiaGral);
 sistema4.AtenderMascota("Bolillo", "Cocodrilo", 20);
 
+Console.WriteLine("\n");
+
+/////////////////////////////////
+
 // Clases Dominio
-
-// Primer Responsabilidad
-#region Solid
-public class MascotaSRP
+public class Mascota
 {
-    public string Nombre { get ; set; }
+    public string Nombre { get; set; }
     public string Tipo { get; set; }
-    public int Edad {  get; set; }
+    public int Edad { get; set; }
 
-    public MascotaSRP(string nombre, string tipo, int edad)
+    public Mascota(string nombre, string tipo, int edad) // S - Tambien va solito //
     {
         Nombre = nombre;
         Tipo = tipo;
         Edad = edad;
     }
-#endregion
+}
 
-// Segunda Responsabilidad
-public class EsValida
-    {
-
-    }
-
-public class Mascota
+public class ValidadorMascota
 {
-   #region NOO Solid
-        public string Nombre { get; set; } 
-        public string Tipo { get; set; }
-        public int Edad { get; set; }
- 
-        public Mascota(string nombre, string tipo, int edad) // S - Tambien va solito
-        {
-            Nombre = nombre;
-            Tipo = tipo;
-            Edad = edad;
-        }
-    #endregion
-    public bool EsValida() // S - Deben de ir en clases independientes
+    public bool EsValida(Mascota mascota) // S - Deben de ir en clases independientes //
     {
-        return !string.IsNullOrEmpty(Nombre) && Edad > 0;
-    }
-
-    public decimal CalcularVacuna() // S - Deben de ir en clases independientes // O - Se puede hacer una interfaz y heredar cada opción
-    {
-        if (Tipo.StartsWith("P") ) return 200;
-        if (Tipo.StartsWith("G")) return 180;
-        if (Tipo.StartsWith("tuga")) return 400;
-
-        return Edad * 50;
+        return !string.IsNullOrEmpty(mascota.Nombre) && mascota.Edad > 0;
     }
 }
 
-public class EmailService
+public interface ICalcuadorVacunas
+{
+    decimal Calcular(Mascota mascota);
+}
+
+public class CalculadoraPerro : ICalcuadorVacunas
+{
+    public decimal Calcular(Mascota mascota) => 200;
+}
+
+public class CalculadoraGato : ICalcuadorVacunas
+{
+    public decimal Calcular(Mascota mascota) => 180;
+}
+
+public class CalculadoraTortuga : ICalcuadorVacunas
+{
+    public decimal Calcular(Mascota mascota) => 400;
+}
+
+public class CalculadoraXDefecto : ICalcuadorVacunas
+{
+    public decimal Calcular(Mascota mascota) => mascota.Edad * 50;
+}
+
+public class CalculadoraVacunas
+{
+    public decimal ObtenerPrecio(Mascota mascota, ICalcuadorVacunas precios) // S - Deben de ir en clases independientes // O - Se puede hacer una interfaz y heredar cada opción
+    {
+        return precios.Calcular(mascota);
+    }
+}
+
+/////////////////////////////////
+
+public interface IServicioMensajeria
+{
+    void Enviar(string mensaje);
+}
+
+public class EmailService : IServicioMensajeria
 {
     public void Enviar(string mensaje)
     {
@@ -84,71 +108,82 @@ public class EmailService
     }
 }
 
+// Ahora podria tener mas serivicos adeams del email
 
-public class Notificador
+public class Notificacion
 {
-    private EmailService email = new EmailService();
-    
-    public void Notificar(Mascota mascota)
+    private readonly IServicioMensajeria cartero; // D - Depencdencia directa
+
+    public Notificacion(IServicioMensajeria servicio) // S
     {
-        email.Enviar($"Mascota info: {mascota.Nombre} | ${mascota.CalcularVacuna() } ");
+        cartero = servicio;
+    }
+
+    public void Notificar(Mascota mascota, decimal costo)
+    {
+        cartero.Enviar($"Mascota info: {mascota.Nombre} | Precio: {costo}");
     }
 }
 
+/////////////////////////////////
+
 public class SistemaVeterinaria
 {
-    private List<Mascota> mascotas = new List<Mascota>();
-    Notificador notificador = new Notificador();
+    protected List<Mascota> mascotas = new List<Mascota>();
 
-    public virtual void  AtenderMascota(string nombre, string tipo, int edad)
-        {
-            var mascota = new Mascota(nombre, tipo, edad);
-            
-            if (!mascota.EsValida())   // Quizas lleve la O idk
+    // Dependencias (DIP)
+    private readonly Notificacion _notificador;
+    private readonly CalculadoraVacunas _calculadoraService;
+    private readonly ICalcuadorVacunas _precioEstrategia;
+
+    public SistemaVeterinaria(Notificacion notificador, CalculadoraVacunas calculadoraService, ICalcuadorVacunas precioEstrategia)
+    {
+        _notificador = notificador;
+        _calculadoraService = calculadoraService;
+        _precioEstrategia = precioEstrategia;
+    }
+
+    public virtual void AtenderMascota(string nombre, string tipo, int edad)
+    {
+        var mascota = new Mascota(nombre, tipo, edad);
+        var validador = new ValidadorMascota();
+
+        if (!validador.EsValida(mascota))
         {
             Console.WriteLine("Mascota no se puede registrar.");
             return;
-            }
-
-            mascotas.Add(mascota);
-            decimal costo = mascota.CalcularVacuna();
-            notificador.Notificar(mascota );
-
-        Console.WriteLine("Resumen de la lista de mascotas | Reporte:");
-
-        foreach ( var m in mascotas )
-        {
-            Console.Write( $"{m.Nombre} - {m.Tipo}" );
         }
 
+        mascotas.Add(mascota);
+
+        decimal costo = _calculadoraService.ObtenerPrecio(mascota, _precioEstrategia);
+
+        _notificador.Notificar(mascota, costo);
+
+        Console.WriteLine("Resumen de la lista de mascotas | Reporte:");
+        foreach (var m in mascotas)
+        {
+            Console.Write($"{m.Nombre} - {m.Tipo} ");
+        }
     }
 }
 
 public class SistemaVeterinariaEspecial : SistemaVeterinaria
 {
+    public SistemaVeterinariaEspecial(
+        Notificacion notificador,
+        CalculadoraVacunas calculadoraService,
+        ICalcuadorVacunas precioEstrategia)
+        : base(notificador, calculadoraService, precioEstrategia)
+    {
+    }
+
     public override void AtenderMascota(string nombre, string tipo, int edad)
     {
-        if (tipo == "Perro")    // Quizas lleve la O idk
-
+        if (tipo == "Perro")
         {
-            Console.WriteLine("Los perros no se atieneden en este sistema");
-            throw new Exception("Sistema Incorrecto");
+            Console.WriteLine("[Aviso Especial]: Esta mascota es un perro, los perros no se admiten en este sistema.");
         }
-
         base.AtenderMascota(nombre, tipo, edad);
     }
 }
-
-
-
-
-
-// IDentificar las cosas, responsabilidades de clase, dependencias directas, abtraccion para interfases, sustituciones en herencia funsionan o no
-    // no encontre de I, suongo que saldra con la implementacion de las O
-
-
-
-// DEspues de comentar el archivo se crea otro archivo donde se implementen las modificaciones en el codigo
-
-// Primer Archivo NoSolid codigo comentado; 
-// Segundo Archivo Solid.cs  se deben de aplicar las sugeriencias del primer archivo con los 5 principios solid
