@@ -33,7 +33,11 @@
     <Compile Remove="24_1_IDK.cs" />
     <Compile Remove="24_2_Archivos.cs" />
     <Compile Remove="24_3_Ejercicio.cs" />
+    <Compile Remove="36_37_Festival Clase.cs" />
+    <Compile Remove="36_37_Festival.cs" />
     <Compile Remove="8_2_Arreglos.cs" />
+    <Compile Remove="Estrucutras\Diccionario\38_2_Tuplas.cs" />
+    <Compile Remove="Estrucutras\Diccionario\38_Estructuras no lineales.cs" />
     <Compile Remove="Solid\31_1_SOLID.cs" />
     <Compile Remove="Solid\31_2_O.cs" />
     <Compile Remove="Solid\31_3_L H.cs" />
@@ -70,6 +74,10 @@
     <None Include="08_2_Arreglos_9_3_10_1.cs" />
     <None Include="09_1_Banco.cs" />
     <None Include="09_2_Banco.cs" />
+    <None Include="36_37_Festival Clase.cs" />
+    <None Include="36_37_Festival.cs" />
+    <None Include="Estrucutras\Diccionario\38_2_Tuplas.cs" />
+    <None Include="Estrucutras\Diccionario\38_Estructuras no lineales.cs" />
     <None Include="Solid\31_1_SOLID.cs" />
     <None Include="Solid\31_2_O.cs" />
     <None Include="Solid\31_3_L H.cs" />
