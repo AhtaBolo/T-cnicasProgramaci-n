@@ -597,3 +597,50 @@ namespace APP.SERVICIOS
 }
 
 8.- Clase Exportador TXT
+public class ExportadorTxt : IExportador
+{
+    public void ExportarATxt(Usuario usuario, string rutaArchivo)
+    {
+        // Validaciones iniciales (opcionales, pero robustas)
+        if (usuario == null)
+        {
+            throw new ArgumentNullException("usuario");
+        }
+
+        if (string.IsNullOrWhiteSpace(rutaArchivo))
+        {
+            throw new ArgumentException("La ruta del archivo no puede estar vacía.", "rutaArchivo");
+        }
+
+        // Construir contenido
+        using (StreamWriter writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
+        {
+            // Encabezado con nombre y fecha (PDF página 11)
+            writer.WriteLine($"Usuario: {usuario.Nombre}");
+            writer.WriteLine($"Fecha de exportación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            writer.WriteLine();
+
+            if (usuario.LibrosRecetas.Count == 0)
+            {
+                writer.WriteLine("El usuario no tiene libros registrados.");
+            }
+            else
+            {
+                // Recorrer todos los libros
+                foreach (var libro in usuario.LibrosRecetas)
+                {
+                    writer.WriteLine($"Libro: {libro.Key}");
+                    
+                    foreach (var receta in libro.Value)
+                    {
+                        // Usar ToString() de Receta (formato exacto)
+                        writer.WriteLine($"  - {receta.ToString()}");
+                    }
+                    
+                    writer.WriteLine();
+                }
+            }
+        }
+        // No se retorna nada; si hay error, la excepción se lanza (FileNotFoundException, etc.)
+    }
+}
