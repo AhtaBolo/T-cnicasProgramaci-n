@@ -286,59 +286,57 @@ public class Ordenador
 
     //MergeSort
 
-    public static List<Producto> MergeSortPorNombre(List<Producto> productos) 
+    public static List<Producto> MergeSortPorNombre(List<Producto> productos)
     {
-        //Caso que detiene la recursividad
-        if (productos.Count<=1) 
+        // Caso que detiene la recursividad
+        if (productos.Count <= 1)
         {
             return productos;
         }
 
-        //1- Dividir la lista en dos partes
+        // 1. Dividir la lista en dos mitades
         int mitad = productos.Count / 2;
         var izquierda = productos.GetRange(0, mitad);
-        var derecha = productos.GetRange(mitad, productos.Count-mitad);
+        var derecha = productos.GetRange(mitad, productos.Count - mitad);
 
-        //2-Ordenar recurisvamente cada mitad
+        // 2. Ordenar recursivamente cada mitad
         izquierda = MergeSortPorNombre(izquierda);
         derecha = MergeSortPorNombre(derecha);
 
-        //3- Mezclar las dos mitades ordenadas
-        return Mezclar(izquierda,derecha);
-    }
+        // 3. Mezclar las dos mitades ordenadas
+        return Mezclar(izquierda, derecha);
 
-    private static List<Producto> Mezclar(List<Producto> izquierda, List<Producto> derecha) 
+    }
+    private static List<Producto> Mezclar(List<Producto> izquierda, List<Producto> derecha)
     {
         var resultado = new List<Producto>();
-        int i = 0; int j=0;
+        int i = 0, j = 0;
 
-        //4- Comparar y agregar en orden
+        // 4. Comparar y agregar en orden 
 
-        while (i<izquierda.Count && j<derecha.Count) 
+        while (i < izquierda.Count && j < derecha.Count)
         {
-            if (string.Compare(izquierda[i].Nombre, derecha[j].Nombre) < 0) 
+            if (string.Compare(izquierda[i].Nombre, derecha[j].Nombre) < 0)
             {
                 resultado.Add(izquierda[i++]);
-            } 
+            }
             else
             {
                 resultado.Add(derecha[j++]);
             }
         }
 
-        //5- Agregar los elementos restantes
-        while (i< izquierda.Count) 
+        // 5. Agregar los elementos restantes (si los hay)
+        while (i < izquierda.Count)
         {
             resultado.Add(izquierda[i++]);
         }
-        while (j<derecha.Count) 
+        while (j < derecha.Count)
         {
             resultado.Add(derecha[j++]);
         }
-
         return resultado;
     }
-
 
     public static List<Producto> MergeSortPorPrecio(List<Producto> productos) 
     {

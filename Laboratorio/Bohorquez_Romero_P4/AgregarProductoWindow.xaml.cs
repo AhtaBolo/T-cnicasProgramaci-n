@@ -32,6 +32,7 @@ namespace GestorProductosWPF {
                 Id = int.Parse(txtId.Text),
                 CodigoBarras = txtCodigoBarras.Text,
                 Nombre = txtNombre.Text,
+                Categoria = txtCategoria.Text,          // ← Línea faltante
                 Precio = (double)decimal.Parse(txtPrecio.Text),
                 Stock = int.Parse(txtStock.Text),
             };

@@ -83,52 +83,81 @@ namespace GestorProductosWPF
                 );
         }
 
-        private void btnBuscar_Click(object sender, RoutedEventArgs e) 
+        /*              No Se Va Hasta Que Termine     kga             */
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             string criterio = comboTipoBusqueda.SelectedItem.ToString();
             string valor = txtBusqueda.Text;
+            List<Producto> productos = gestor.ObtenerListaProductos();
 
-            switch (criterio) 
+            // Ajustar el máximo de la barra al tamaño de la lista
+            iteraciones.Maximum = productos.Count;
+            iteraciones.Value = 0;
+
+            switch (criterio)
             {
                 case "ID":
-                    if (int.TryParse(valor, out int id)) 
+                    if (int.TryParse(valor, out int id))
                     {
-                        var (producto, iteraciones) = 
-                            Buscador.BusquedaBinaria(gestor.ObtenerListaProductos(),id);
-                        MostrarResultadoBusqueda(producto, iteraciones);
+                        var productosOrdenados = new List<Producto>(productos);
+                        Ordenador.QuickSortPorId(productosOrdenados);
+                        var (producto, iter) = Buscador.BusquedaBinaria(productosOrdenados, id);
+                        MostrarResultadoBusqueda(producto, iter, productos.Count, esBinaria: true);
                     }
                     break;
 
                 case "Nombre":
-                    var (productoNombre, iteracionesNombre) =
-                            Buscador.BusquedaSecuencial(gestor.ObtenerListaProductos(), valor);
-                    MostrarResultadoBusqueda(productoNombre, iteracionesNombre);
+                    var (productoNombre, iterNombre) = Buscador.BusquedaSecuencial(productos, valor);
+                    MostrarResultadoBusqueda(productoNombre, iterNombre, productos.Count, esBinaria: false);
                     break;
-
             }
         }
 
-        public void MostrarResultadoBusqueda(Producto producto, int iteracionesP) 
+        public void MostrarResultadoBusqueda(Producto producto, int iteracionesRealizadas, int totalProductos, bool esBinaria)
         {
+            // Mostrar resultado del producto
             txtResultadoBusqueda.Text = producto?.ToString() ?? "No encontrado";
-            iteraciones.Value = iteracionesP;
+
+            // Actualizar barra de progreso
+            iteraciones.Value = iteracionesRealizadas;
+
+            // Calcular iteraciones que faltaron
+            int iteracionesFaltaron;
+            if (esBinaria)
+            {
+                // Para búsqueda binaria, no hay un resto lineal, se puede mostrar 0 o el teórico (log2 total - iteracionesRealizadas)
+                // Por simplicidad, mostramos 0.
+                iteracionesFaltaron = 0;
+            }
+            else
+            {
+                // Búsqueda secuencial: si se encontró, faltaron = total - iteracionesRealizadas
+                // Si no se encontró, iteracionesRealizadas = total, entonces faltaron 0.
+                iteracionesFaltaron = totalProductos - iteracionesRealizadas;
+            }
+
+            // Mostrar en txtIteraciones
+            txtIteraciones.Text = $"Iteraciones: {iteracionesRealizadas}";
         }
 
         private void btnOrdenar_Click(object sender, RoutedEventArgs e) 
         {
+            // Obtener copia actualizada de la lista original
             List<Producto> productos = new List<Producto>(gestor.ObtenerListaProductos());
 
-            string criterio = comboCriterioOrden.SelectedItem.ToString();
+            string criterio = comboCriterioOrden.SelectedItem?.ToString() ?? "Nombre"; // evitar null
 
-            switch (criterio) 
+            switch (criterio)
             {
                 case "ID":
                     Ordenador.QuickSortPorId(productos);
                     break;
 
                 case "Nombre":
-                    Ordenador.MergeSortPorNombre(productos);
+                    // CORRECCIÓN: MergeSort devuelve nueva lista ordenada
+                    productos = Ordenador.MergeSortPorNombre(productos);
                     break;
+
                 case "Precio":
                     Ordenador.QuickSortPorPrecio(productos);
                     break;
@@ -138,30 +167,64 @@ namespace GestorProductosWPF
             DibujarGraficoBarras(productos);
         }
 
-        public void DibujarGraficoBarras(List<Producto> productos) 
+        public void DibujarGraficoBarras(List<Producto> productos)
         {
-            canvasGrafico.Children.Clear();
-            double maxPrecio = productos.Max(p => p.Precio);
-            double escala = canvasGrafico.ActualHeight / maxPrecio;
+            if (productos == null || productos.Count == 0) return;
 
-            for (int i =0; i<productos.Count-1;i++) 
+            canvasGrafico.Children.Clear();
+
+            // Esperar a que el canvas tenga dimensiones reales (si no, usar valores por defecto)
+            double anchoCanvas = canvasGrafico.ActualWidth > 0 ? canvasGrafico.ActualWidth : 800;
+            double altoCanvas = canvasGrafico.ActualHeight > 0 ? canvasGrafico.ActualHeight : 400;
+
+            double maxPrecio = productos.Max(p => p.Precio);
+            if (maxPrecio <= 0) return;
+
+            double escala = altoCanvas / maxPrecio;
+            double anchoBarra = 40;
+            double separacion = 10;
+            double xInicial = 20;
+
+            for (int i = 0; i < productos.Count; i++)
             {
+                var producto = productos[i];
+                double altoBarra = producto.Precio * escala;
+                double x = xInicial + i * (anchoBarra + separacion);
+                double y = altoCanvas - altoBarra;
+
+                // Barra
                 Rectangle barra = new Rectangle
                 {
-                    Width = 30,
-                    Height = productos[i].Precio * escala,
-                    Fill = Brushes.CornflowerBlue,
-                    Margin = new Thickness(i * 40, canvasGrafico.ActualHeight 
-                        - (productos[i].Precio*escala), 0,0)
+                    Width = anchoBarra,
+                    Height = altoBarra,
+                    Fill = Brushes.CornflowerBlue
                 };
+                Canvas.SetLeft(barra, x);
+                Canvas.SetTop(barra, y);
                 canvasGrafico.Children.Add(barra);
 
-                TextBlock etiqueta = new TextBlock
+                // Etiqueta de precio (opcional, encima de la barra)
+                TextBlock precioText = new TextBlock
                 {
-                    Text = productos[i].Nombre,
-                    Margin = new Thickness(i * 40, canvasGrafico.ActualHeight-20,0,0)
+                    Text = $"{producto.Precio:C}",
+                    FontSize = 10,
+                    Foreground = Brushes.Black
                 };
-                canvasGrafico.Children.Add (etiqueta);
+                Canvas.SetLeft(precioText, x);
+                Canvas.SetTop(precioText, y - 15);
+                canvasGrafico.Children.Add(precioText);
+
+                // Etiqueta de nombre (debajo de la barra)
+                TextBlock nombreText = new TextBlock
+                {
+                    Text = producto.Nombre.Length > 8 ? producto.Nombre.Substring(0, 6) + "..." : producto.Nombre,
+                    FontSize = 9,
+                    TextAlignment = TextAlignment.Center,
+                    Width = anchoBarra
+                };
+                Canvas.SetLeft(nombreText, x);
+                Canvas.SetTop(nombreText, altoCanvas - 5);
+                canvasGrafico.Children.Add(nombreText);
             }
         }
 

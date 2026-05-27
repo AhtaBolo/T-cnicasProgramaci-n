@@ -6,15 +6,14 @@
         xmlns:local="clr-namespace:GestorProductosWPF"
         mc:Ignorable="d"
         Title="AgregarProductoWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FFEEE8DC">
         <TextBox x:Name="txtId" HorizontalAlignment="Left" Margin="31,44,0,0" TextWrapping="Wrap" Text="Id" VerticalAlignment="Top" Width="313" Height="31"/>
-        <TextBox x:Name="txtNombre" HorizontalAlignment="Left" Margin="31,148,0,0" TextWrapping="Wrap" Text="Nombre" VerticalAlignment="Top" Width="313" Height="31"/>
-        <TextBox x:Name="txtCategoria" HorizontalAlignment="Left" Margin="31,0,0,0" TextWrapping="Wrap" Text="Categoria" VerticalAlignment="Center" Width="313" Height="31"/>
-        <TextBox x:Name="txtPrecio" HorizontalAlignment="Left" Margin="31,257,0,0" TextWrapping="Wrap" Text="Precio" VerticalAlignment="Top" Width="313" Height="31"/>
-        <TextBox x:Name="txtStock" HorizontalAlignment="Left" Margin="31,319,0,0" TextWrapping="Wrap" Text="Stock" VerticalAlignment="Top" Width="313" Height="31"/>
-        <TextBox x:Name="txtCodigoBarras" HorizontalAlignment="Left" Margin="31,94,0,0" TextWrapping="Wrap" Text="Codigo Barras" VerticalAlignment="Top" Width="313" Height="31"/>
-        <Button x:Name="btnGuardar" Content="Guardar" HorizontalAlignment="Left" Margin="574,263,0,0" VerticalAlignment="Top" Height="87" Width="177" Click="btnGuardar_Click"/>
-        <Image HorizontalAlignment="Left" Height="125" Margin="467,76,0,0" VerticalAlignment="Top" Width="358" Source="/Captura de pantalla 2025-09-08 093821.png"/>
+        <TextBox x:Name="txtNombre" HorizontalAlignment="Left" Margin="31,155,0,0" TextWrapping="Wrap" Text="Nombre" VerticalAlignment="Top" Width="313" Height="31"/>
+        <TextBox x:Name="txtCategoria" HorizontalAlignment="Left" Margin="31,215,0,0" TextWrapping="Wrap" Text="Categoria" VerticalAlignment="Top" Width="313" Height="31"/>
+        <TextBox x:Name="txtPrecio" HorizontalAlignment="Left" Margin="31,273,0,0" TextWrapping="Wrap" Text="Precio" VerticalAlignment="Top" Width="313" Height="31"/>
+        <TextBox x:Name="txtStock" HorizontalAlignment="Left" Margin="31,329,0,0" TextWrapping="Wrap" Text="Stock" VerticalAlignment="Top" Width="313" Height="31"/>
+        <TextBox x:Name="txtCodigoBarras" HorizontalAlignment="Left" Margin="31,100,0,0" TextWrapping="Wrap" Text="Codigo Barras" VerticalAlignment="Top" Width="313" Height="31"/>
+        <Button x:Name="btnGuardar" Content="Guardar" HorizontalAlignment="Left" Margin="484,0,0,0" VerticalAlignment="Center" Height="57" Width="135" Click="btnGuardar_Click"/>
 
     </Grid>
 </Window>
